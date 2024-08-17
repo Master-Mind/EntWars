@@ -22,9 +22,25 @@ add_executable(EntWars ${SOURCES})
 # Link libraries
 find_package(SFML CONFIG REQUIRED COMPONENTS system window graphics network audio)
 find_package(entt CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_package(ImGui-SFML CONFIG REQUIRED)
 
-target_link_libraries(EntWars PRIVATE sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
-target_link_libraries(EntWars PRIVATE EnTT::EnTT)
+target_link_libraries(EntWars 
+	PRIVATE 
+		sfml-system 
+		sfml-window 
+		sfml-graphics 
+		sfml-network 
+		sfml-audio
+	)
+target_link_libraries(EntWars
+ PRIVATE 
+	EnTT::EnTT
+ )
+target_link_libraries(EntWars
+  PUBLIC
+    ImGui-SFML::ImGui-SFML
+)
 
 # Set the output directory for the executable
 set_target_properties(EntWars PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
