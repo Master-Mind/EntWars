@@ -1,0 +1,8 @@
+{
+  "name": "entwars",
+  "version": "1.0",
+  "dependencies": [
+    "entt",
+    "sfml"
+  ]
+}
