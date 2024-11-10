@@ -4,6 +4,10 @@
   "dependencies": [
     "entt",
     "sfml",
-	"imgui-sfml"
+    "imgui-sfml",
+    "glm",
+    "spdlog",
+    "yaml-cpp",
+    "portable-file-dialogs"
   ]
 }

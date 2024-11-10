@@ -1,17 +1,27 @@
 #include <cassert>
+#include <filesystem>
 #include <SFML/Graphics.hpp>
 #include <imgui-SFML.h>
 #include <imgui.h>
+#include <iostream>
+
 #include "Editor/Editor.h"
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "Core/Input.h"
+#include "Graphics/Camera.h"
+#include "Core/TheWindow.h"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Ent Wars");
+	std::cout << "Running at: " << std::filesystem::current_path() << std::endl;
+	sf::RenderWindow& window = GetWindow();
     window.setVerticalSyncEnabled(true);
 
     bool editorInited = EditorInit(window);
 
     assert(editorInited);
+    sf::CircleShape dude(30);
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -23,17 +33,50 @@ int main()
         {
             EditorProcessEvents(window, event);
             // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
-                window.close();
+            switch (event.type)
+            {
+            case sf::Event::Closed:
+				window.close();
+                break;
+            case sf::Event::Resized: break;
+            case sf::Event::LostFocus: break;
+            case sf::Event::GainedFocus: break;
+            case sf::Event::TextEntered: break;
+            case sf::Event::KeyPressed:
+            case sf::Event::KeyReleased:
+            case sf::Event::MouseWheelMoved:
+            case sf::Event::MouseWheelScrolled:
+            case sf::Event::MouseButtonPressed:
+            case sf::Event::MouseButtonReleased:
+            case sf::Event::JoystickButtonPressed: 
+            case sf::Event::JoystickButtonReleased: 
+            case sf::Event::JoystickMoved: 
+            case sf::Event::TouchBegan: 
+            case sf::Event::TouchMoved:
+            case sf::Event::TouchEnded:
+            case sf::Event::MouseMoved:
+				HandeInput(event);
+            	break;
+            case sf::Event::MouseEntered: break;
+            case sf::Event::MouseLeft: break;
+            case sf::Event::JoystickConnected: break;
+            case sf::Event::JoystickDisconnected: break;
+            case sf::Event::SensorChanged: break;
+            case sf::Event::Count: break;
+            default: ;
+            }
         }
 
         EditorUpdate(window);
 
+		CameraUpdate(window);
         window.clear();
-
-        window.draw(sf::CircleShape(3));
+        sf::Vertex lines[]{ sf::Vertex(), sf::Vertex(sf::Vector2f(100,100), sf::Color::Red)};
+        window.draw(lines, 2, sf::Lines);
+        window.draw(dude);
         EditorRender(window);
         window.display();
+		InputEndFrame();
     }
 
     EditorDeinit();

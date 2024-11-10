@@ -10,11 +10,14 @@ endif()
 project(EntWars)
 
 # Specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add source files
 file(GLOB_RECURSE SOURCES "src/*.cpp")
+
+add_subdirectory(reflect-cpp)
+set(REFLECTCPP_YAML ON)
 
 # Add the executable
 add_executable(EntWars ${SOURCES})
@@ -41,6 +44,8 @@ target_link_libraries(EntWars
   PUBLIC
     ImGui-SFML::ImGui-SFML
 )
+
+target_link_libraries(EntWars PRIVATE reflectcpp)
 
 # Set the output directory for the executable
 set_target_properties(EntWars PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
