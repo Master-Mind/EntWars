@@ -9,7 +9,12 @@ void CameraUpdate(sf::RenderWindow& window)
 {
 	static sf::View view(sf::FloatRect(0, 0, 400, 400));
 	static float zoom = 1.0f;
-	const float cameraSpeed = 0.1f;
+	float cameraSpeed = 1.1f;
+
+	if (InputDown(Input::Faster))
+	{
+		cameraSpeed *= 5;
+	}
 
 	view.setSize(window.getSize().x * zoom, window.getSize().y * zoom);
 

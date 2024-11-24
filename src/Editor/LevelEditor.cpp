@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include <SFML/Graphics/Shape.hpp>
 
+#include "../Core/Input.h"
 #include "SFML/Window/Mouse.hpp"
 
 bool EditLevel(std::unique_ptr<Level>& level, sf::RenderWindow &window)
@@ -23,6 +24,15 @@ bool EditLevel(std::unique_ptr<Level>& level, sf::RenderWindow &window)
 
 		static int curTile = 0;
 		ImGui::Combo("Tile", &curTile, "Empty\0Wall\0");
+
+		if (InputDown(Input::Num0))
+		{
+			curTile = 0;
+		}
+		else if (InputDown(Input::Num1))
+		{
+			curTile = 1;
+		}
 
 		if (newWidth < 0)
 		{
@@ -63,8 +73,8 @@ bool EditLevel(std::unique_ptr<Level>& level, sf::RenderWindow &window)
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 			sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
-			int gridx = static_cast<int>(worldPos.x / level->tileMap->tileSize);
-			int gridy = static_cast<int>(worldPos.y / level->tileMap->tileSize); //hittin the gridy for ukraine
+			int gridx = static_cast<int>(std::floor(worldPos.x / level->tileMap->tileSize));
+			int gridy = static_cast<int>(std::floor(worldPos.y / level->tileMap->tileSize)); //hittin the gridy for ukraine
 
 			sf::Vertex square [5] = {
 				sf::Vertex(sf::Vector2f(gridx * level->tileMap->tileSize, gridy * level->tileMap->tileSize), sf::Color::Red),
@@ -75,6 +85,12 @@ bool EditLevel(std::unique_ptr<Level>& level, sf::RenderWindow &window)
 			};
 
 			window.draw(square, 5, sf::LineStrip);
+
+			if (InputDown(Input::Select) && level->tileMap->IsInBounds(gridx, gridy) && !ImGui::IsWindowHovered())
+			{
+				level->tileMap->SetTile(gridx, gridy, static_cast<TileType>(curTile));
+				changed = true;
+			}
 		}
 
 

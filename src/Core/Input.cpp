@@ -45,6 +45,39 @@ void HandeInput(sf::Event& _event)
 				inputs[static_cast<size_t>(Input::OpenLevel)] = true;
 			}
 			break;
+		case sf::Keyboard::Num0:
+			inputs[static_cast<size_t>(Input::Num0)] = true;
+			break;
+		case sf::Keyboard::Num1:
+			inputs[static_cast<size_t>(Input::Num1)] = true;
+			break;
+		case sf::Keyboard::Num2:
+			inputs[static_cast<size_t>(Input::Num2)] = true;
+			break;
+		case sf::Keyboard::Num3:
+			inputs[static_cast<size_t>(Input::Num3)] = true;
+			break;
+		case sf::Keyboard::Num4:
+			inputs[static_cast<size_t>(Input::Num4)] = true;
+			break;
+		case sf::Keyboard::Num5:
+			inputs[static_cast<size_t>(Input::Num5)] = true;
+			break;
+		case sf::Keyboard::Num6:
+			inputs[static_cast<size_t>(Input::Num6)] = true;
+			break;
+		case sf::Keyboard::Num7:
+			inputs[static_cast<size_t>(Input::Num7)] = true;
+			break;
+		case sf::Keyboard::Num8:
+			inputs[static_cast<size_t>(Input::Num8)] = true;
+			break;
+		case sf::Keyboard::Num9:
+			inputs[static_cast<size_t>(Input::Num9)] = true;
+			break;
+		case sf::Keyboard::LShift:
+			inputs[static_cast<size_t>(Input::Faster)] = true;
+			break;
 			default:
 				break;
 		}
@@ -76,6 +109,39 @@ void HandeInput(sf::Event& _event)
 		case sf::Keyboard::O:
 			inputs[static_cast<size_t>(Input::OpenLevel)] = false;
 			break;
+		case sf::Keyboard::Num0:
+			inputs[static_cast<size_t>(Input::Num0)] = false;
+			break;
+		case sf::Keyboard::Num1:
+			inputs[static_cast<size_t>(Input::Num1)] = false;
+			break;
+		case sf::Keyboard::Num2:
+			inputs[static_cast<size_t>(Input::Num2)] = false;
+			break;
+		case sf::Keyboard::Num3:
+			inputs[static_cast<size_t>(Input::Num3)] = false;
+			break;
+		case sf::Keyboard::Num4:
+			inputs[static_cast<size_t>(Input::Num4)] = false;
+			break;
+		case sf::Keyboard::Num5:
+			inputs[static_cast<size_t>(Input::Num5)] = false;
+			break;
+		case sf::Keyboard::Num6:
+			inputs[static_cast<size_t>(Input::Num6)] = false;
+			break;
+		case sf::Keyboard::Num7:
+			inputs[static_cast<size_t>(Input::Num7)] = false;
+			break;
+		case sf::Keyboard::Num8:
+			inputs[static_cast<size_t>(Input::Num8)] = false;
+			break;
+		case sf::Keyboard::Num9:
+			inputs[static_cast<size_t>(Input::Num9)] = false;
+			break;
+		case sf::Keyboard::LShift:
+			inputs[static_cast<size_t>(Input::Faster)] = false;
+			break;
 		default:
 			break;
 		}
@@ -90,6 +156,21 @@ void HandeInput(sf::Event& _event)
 		else if (_event.mouseWheelScroll.delta < 0)
 		{
 			inputs[static_cast<size_t>(Input::ZoomOut)] = true;
+		}
+	}
+
+	if (_event.type == sf::Event::MouseButtonPressed)
+	{
+		if (_event.mouseButton.button == sf::Mouse::Left)
+		{
+			inputs[static_cast<size_t>(Input::Select)] = true;
+		}
+	}
+	else if (_event.type == sf::Event::MouseButtonReleased)
+	{
+		if (_event.mouseButton.button == sf::Mouse::Left)
+		{
+			inputs[static_cast<size_t>(Input::Select)] = false;
 		}
 	}
 }
