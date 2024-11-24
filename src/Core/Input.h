@@ -13,8 +13,10 @@ enum class Input
 	Right,
 	ZoomIn,
 	ZoomOut,
+	NewLevel,
+	SaveLevel,
+	OpenLevel,
 	Count
-
 };
 
 void HandeInput(sf::Event& _event);

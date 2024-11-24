@@ -21,7 +21,6 @@ int main()
     bool editorInited = EditorInit(window);
 
     assert(editorInited);
-    sf::CircleShape dude(30);
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -67,13 +66,10 @@ int main()
             }
         }
 
-        EditorUpdate(window);
-
 		CameraUpdate(window);
-        window.clear();
-        sf::Vertex lines[]{ sf::Vertex(), sf::Vertex(sf::Vector2f(100,100), sf::Color::Red)};
-        window.draw(lines, 2, sf::Lines);
-        window.draw(dude);
+        window.clear(sf::Color(234, 182, 118));
+
+        EditorUpdate(window);
         EditorRender(window);
         window.display();
 		InputEndFrame();

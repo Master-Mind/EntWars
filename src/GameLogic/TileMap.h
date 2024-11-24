@@ -5,6 +5,8 @@
 #include <vector>
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include "SFML/Graphics/RenderWindow.hpp"
+
 enum TileType : char
 {
 	empty,
@@ -31,6 +33,9 @@ struct TileMap
 
 	void Resize(int newWidth, int newHeight);
 
+	void Render(sf::RenderWindow& window);
+
+	friend std::expected<std::unique_ptr<TileMap>, std::string> LoadTileMap(const std::filesystem::path& path);
 private:
 	int GetIndex(size_t x, size_t y) const
 	{
@@ -38,7 +43,6 @@ private:
 	}
 
 	std::vector<TileType> tiles;
-	std::vector<std::unique_ptr<sf::RectangleShape>> tileShapes;
 };
 
 std::expected<std::unique_ptr<TileMap>, std::string> LoadTileMap(const std::filesystem::path& path);

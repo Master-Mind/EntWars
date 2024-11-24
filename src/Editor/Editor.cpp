@@ -62,23 +62,25 @@ void EditorUpdate(sf::RenderWindow& _mainwindow)
 {
 	static sf::Clock deltaClock;
 
+	editedLevel->tileMap->Render(_mainwindow);
+
     ImGui::SFML::Update(_mainwindow, deltaClock.restart());
     ImGui::ShowDemoWindow();
     ImGui::BeginMainMenuBar();
 
     if (ImGui::BeginMenu("File"))
     {
-		if (ImGui::Button("New Level"))
+		if (ImGui::Button("New Level (Ctrl+N)"))
 		{
 			newLevel();
 		}
 
-		if (ImGui::Button("Open Level"))
+		if (ImGui::Button("Open Level (Ctrl+0)"))
 		{
 			openLevel();
 		}
 
-		if (ImGui::Button("Save Level"))
+		if (ImGui::Button("Save Level (Ctrl+S)"))
 		{
 			saveLevel();
 		}
@@ -86,11 +88,26 @@ void EditorUpdate(sf::RenderWindow& _mainwindow)
         ImGui::EndMenu();
     }
 
+	if (InputDown(Input::NewLevel))
+	{
+		newLevel();
+	}
+
+	if (InputDown(Input::OpenLevel))
+	{
+		openLevel();
+	}
+
+	if (InputDown(Input::SaveLevel))
+	{
+		saveLevel();
+	}
+
     ImGui::EndMainMenuBar();
 
 	if (editedLevel)
 	{
-		EditLevel(editedLevel);
+		EditLevel(editedLevel, _mainwindow);
 	}
 }
 

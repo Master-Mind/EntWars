@@ -9,40 +9,75 @@ void HandeInput(sf::Event& _event)
 {
 	if (_event.type == sf::Event::KeyPressed)
 	{
-		if (_event.key.code == sf::Keyboard::A || _event.key.code == sf::Keyboard::Left)
+		switch (_event.key.code)
 		{
+		case sf::Keyboard::A:
+		case sf::Keyboard::Left:
 			inputs[static_cast<size_t>(Input::Left)] = true;
-		}
-		else if (_event.key.code == sf::Keyboard::D || _event.key.code == sf::Keyboard::Right)
-		{
+			break;
+		case sf::Keyboard::D:
+		case sf::Keyboard::Right:
 			inputs[static_cast<size_t>(Input::Right)] = true;
-		}
-		else if (_event.key.code == sf::Keyboard::W || _event.key.code == sf::Keyboard::Up)
-		{
+			break;
+		case sf::Keyboard::W:
+		case sf::Keyboard::Up:
 			inputs[static_cast<size_t>(Input::Up)] = true;
-		}
-		else if (_event.key.code == sf::Keyboard::S || _event.key.code == sf::Keyboard::Down)
-		{
+			break;
+		case sf::Keyboard::S:
+			if (_event.key.control)
+			{
+				inputs[static_cast<size_t>(Input::SaveLevel)] = true;
+				break;
+			}
+			_FALLTHROUGH;
+		case sf::Keyboard::Down:
 			inputs[static_cast<size_t>(Input::Down)] = true;
+			break;
+		case sf::Keyboard::N:
+			if (_event.key.control)
+			{
+				inputs[static_cast<size_t>(Input::NewLevel)] = true;
+			}
+			break;
+		case sf::Keyboard::O:
+			if (_event.key.control)
+			{
+				inputs[static_cast<size_t>(Input::OpenLevel)] = true;
+			}
+			break;
+			default:
+				break;
 		}
 	}
 	else if (_event.type == sf::Event::KeyReleased)
 	{
-		if (_event.key.code == sf::Keyboard::A || _event.key.code == sf::Keyboard::Left)
+		switch (_event.key.code)
 		{
+		case sf::Keyboard::A:
+		case sf::Keyboard::Left:
 			inputs[static_cast<size_t>(Input::Left)] = false;
-		}
-		else if (_event.key.code == sf::Keyboard::D || _event.key.code == sf::Keyboard::Right)
-		{
+			break;
+		case sf::Keyboard::D:
+		case sf::Keyboard::Right:
 			inputs[static_cast<size_t>(Input::Right)] = false;
-		}
-		else if (_event.key.code == sf::Keyboard::W || _event.key.code == sf::Keyboard::Up)
-		{
+			break;
+		case sf::Keyboard::W:
+		case sf::Keyboard::Up:
 			inputs[static_cast<size_t>(Input::Up)] = false;
-		}
-		else if (_event.key.code == sf::Keyboard::S || _event.key.code == sf::Keyboard::Down)
-		{
+			break;
+		case sf::Keyboard::S:
+		case sf::Keyboard::Down:
 			inputs[static_cast<size_t>(Input::Down)] = false;
+			inputs[static_cast<size_t>(Input::SaveLevel)] = false;
+			break;
+		case sf::Keyboard::N:
+			inputs[static_cast<size_t>(Input::NewLevel)] = false;
+			break;
+		case sf::Keyboard::O:
+			inputs[static_cast<size_t>(Input::OpenLevel)] = false;
+			break;
+		default:
+			break;
 		}
 	}
 

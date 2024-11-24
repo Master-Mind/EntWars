@@ -26,6 +26,9 @@ std::expected< std::unique_ptr<Level>, std::string> LoadLevel(const std::filesys
 	std::unique_ptr<Level> level = std::make_unique<Level>();
 
 	level->tileMap = std::move(tileMapResult.value());
+	level->name = path.stem().string();
+	level->path = path;
+	level->tileMapPath = def.tileMapPath;
 
 	return level;
 }
