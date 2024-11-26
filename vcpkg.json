@@ -8,6 +8,8 @@
     "glm",
     "spdlog",
     "yaml-cpp",
-    "portable-file-dialogs"
+    "portable-file-dialogs",
+    "eastl",
+    "argparse"
   ]
 }

@@ -17,6 +17,7 @@ enum class Input
 	SaveLevel,
 	OpenLevel,
 	Select,
+	Order,
 	Num0,
 	Num1,
 	Num2,

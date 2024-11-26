@@ -5,12 +5,16 @@
 #include <vector>
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include "EASTL/hash_set.h"
 #include "SFML/Graphics/RenderWindow.hpp"
+
+struct PathNode;
 
 enum TileType : char
 {
 	empty,
 	wall,
+	error,
 	count
 };
 
@@ -18,8 +22,8 @@ extern const float tileCosts[TileType::count];
 
 struct TileMap
 {
-	int width;
-	int height;
+	int width = 0;
+	int height = 0;
 	const static float tileSize;
 	[[nodiscard]] TileType GetTile(size_t x, size_t y) const
 	{
@@ -50,6 +54,22 @@ struct TileMap
 	{
 		return tileCosts[GetTile(x, y)];
 	}
+	[[nodiscard]] float GetCost(const sf::Vector2i& pos) const
+	{
+		return GetCost(pos.x, pos.y);
+	}
+	[[nodiscard]] bool IsEmpty(const sf::Vector2i& pos) const
+	{
+		return IsEmpty(pos.x, pos.y);
+	}
+	[[nodiscard]] bool IsWall(const sf::Vector2i& pos) const
+	{
+		return IsWall(pos.x, pos.y);
+	}
+	[[nodiscard]] bool IsInBounds(const sf::Vector2i& pos) const
+	{
+		return IsInBounds(pos.x, pos.y);
+	}
 
 #ifndef NDEBUG
 	void SetDebugTile(int x, int y, bool val)
@@ -69,13 +89,19 @@ struct TileMap
 
 	friend std::expected<std::unique_ptr<TileMap>, std::string> LoadTileMap(const std::filesystem::path& path);
 
-	std::vector<sf::Vector2f> AStarSearch(sf::Vector2f start, sf::Vector2f end);
+	std::vector<sf::Vector2f> AStarSearch(sf::Vector2f start, sf::Vector2f end, bool debug = false);
 private:
 	int GetIndex(size_t x, size_t y) const
 	{
 		return y * width + x;
 	}
 
+	int GetIndex(const sf::Vector2i &pos) const
+	{
+		return GetIndex(pos.x, pos.y);
+	}
+	void VisitNeighor(const PathNode& current, int x, int y,
+		eastl::hash_set<sf::Vector2i>& closedSet, std::vector<float>& costSoFar, std::vector<bool>& visited);
 	std::vector<TileType> tiles;
 #ifndef NDEBUG
 	std::vector<bool> debugtiles;

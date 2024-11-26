@@ -165,12 +165,20 @@ void HandeInput(sf::Event& _event)
 		{
 			inputs[static_cast<size_t>(Input::Select)] = true;
 		}
+		else if (_event.mouseButton.button == sf::Mouse::Right)
+		{
+			inputs[static_cast<size_t>(Input::Order)] = true;
+		}
 	}
 	else if (_event.type == sf::Event::MouseButtonReleased)
 	{
 		if (_event.mouseButton.button == sf::Mouse::Left)
 		{
 			inputs[static_cast<size_t>(Input::Select)] = false;
+		}
+		else if (_event.mouseButton.button == sf::Mouse::Right)
+		{
+			inputs[static_cast<size_t>(Input::Order)] = false;
 		}
 	}
 }

@@ -21,12 +21,15 @@ set(REFLECTCPP_YAML ON)
 
 # Add the executable
 add_executable(EntWars ${SOURCES})
+# Add precompiled header
+target_precompile_headers(EntWars PRIVATE src/pch.h)
 
 # Link libraries
 find_package(SFML CONFIG REQUIRED COMPONENTS system window graphics network audio)
 find_package(entt CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(ImGui-SFML CONFIG REQUIRED)
+find_package(EASTL CONFIG REQUIRED)
 
 target_link_libraries(EntWars 
 	PRIVATE 
@@ -43,6 +46,10 @@ target_link_libraries(EntWars
 target_link_libraries(EntWars
   PUBLIC
     ImGui-SFML::ImGui-SFML
+)
+target_link_libraries(EntWars
+  PUBLIC
+    EASTL
 )
 
 target_link_libraries(EntWars PRIVATE reflectcpp)

@@ -7,13 +7,51 @@
 
 #include "Editor/Editor.h"
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <argparse/argparse.hpp>
 #include "Core/Input.h"
 #include "Graphics/Camera.h"
 #include "Core/TheWindow.h"
+#include "GameLogic/Level.h"
 
-int main()
+int main(int argc, char **argv)
 {
+    argparse::ArgumentParser program("EntWars");
+    program.add_argument("--testastar")
+        .help("run astar search many times for performance testing")
+        .default_value(false)
+        .implicit_value(true);
+
+    try {
+        program.parse_args(argc, argv);
+    }
+    catch (const std::exception& err) {
+        std::cerr << err.what() << std::endl;
+        std::cerr << program;
+        std::exit(1);
+    }
+
+    if (program.get<bool>("--testastar"))
+    {
+        auto level = LoadLevel("./data/levels/default.json").value();
+
+        auto start = std::chrono::high_resolution_clock::now();
+
+        const int NumSearches = 10000;
+
+        for (int i = 0; i < NumSearches; ++i)
+        {
+            level->tileMap->AStarSearch({ 140, 540 }, { 610, 19 });
+        }
+
+        auto dur = std::chrono::high_resolution_clock::now() - start;
+
+		float secs = std::chrono::duration<float>(dur).count();
+
+        std::cout << secs << " seconds per " << NumSearches << " Astar searches" << std::endl;
+
+        return 0;
+    }
+
 	std::cout << "Running at: " << std::filesystem::current_path() << std::endl;
 	sf::RenderWindow& window = GetWindow();
     window.setVerticalSyncEnabled(true);
@@ -78,4 +116,26 @@ int main()
     EditorDeinit();
 
     return 0;
+}
+
+void* operator new[](size_t size, const char* name, int flags, unsigned debugFlags, const char* file, int line)
+{
+    (void)name;
+    (void)flags;
+    (void)debugFlags;
+    (void)file;
+    (void)line;
+    return ::operator new[](size);
+}
+
+void* operator new[](size_t size, size_t alignment, size_t offset, const char* name, int flags, unsigned debugFlags, const char* file, int line)
+{
+    (void)name;
+    (void)flags;
+    (void)debugFlags;
+    (void)file;
+    (void)line;
+    (void)alignment;
+    (void)offset;
+    return ::operator new[](size);
 }
