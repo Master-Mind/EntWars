@@ -52,6 +52,21 @@ target_link_libraries(EntWars
     EASTL
 )
 
+if (CMAKE_VERSION VERSION_GREATER 3.7.8)
+    if (MSVC_IDE)
+        option(VS_ADD_NATIVE_VISUALIZERS "Configure project to use Visual Studio native visualizers" TRUE)
+    else()
+        set(VS_ADD_NATIVE_VISUALIZERS FALSE CACHE INTERNAL "Native visualizers are Visual Studio extension" FORCE)
+    endif()
+
+    # add natvis file to the library so it will automatically be loaded into Visual Studio
+    if(VS_ADD_NATIVE_VISUALIZERS)
+        target_sources(EASTL INTERFACE
+            ${CMAKE_CURRENT_SOURCE_DIR}/EASTL.natvis
+        )
+    endif()
+endif()
+
 target_link_libraries(EntWars PRIVATE reflectcpp)
 
 # Set the output directory for the executable

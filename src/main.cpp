@@ -1,23 +1,30 @@
 #include <cassert>
 #include <filesystem>
-#include <SFML/Graphics.hpp>
-#include <imgui-SFML.h>
 #include <imgui.h>
+#include <imgui-SFML.h>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
-#include "Editor/Editor.h"
-#include <glm/gtc/matrix_transform.hpp>
-#include <argparse/argparse.hpp>
+#include "./Core/TaskThreads.h"
 #include "Core/Input.h"
-#include "Graphics/Camera.h"
 #include "Core/TheWindow.h"
+#include "Editor/Editor.h"
 #include "GameLogic/Level.h"
+#include "Graphics/Camera.h"
+#include <argparse/argparse.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "GameLogic/PathWorker.h"
 
 int main(int argc, char **argv)
 {
     argparse::ArgumentParser program("EntWars");
     program.add_argument("--testastar")
         .help("run astar search many times for performance testing")
+        .default_value(false)
+        .implicit_value(true);
+    program.add_argument("--testthreading")
+        .help("run astar search many times on a seperate thread for performance testing")
         .default_value(false)
         .implicit_value(true);
 
@@ -52,9 +59,46 @@ int main(int argc, char **argv)
         return 0;
     }
 
+    if (program.get<bool>("--testthreading"))
+    {
+        auto level = LoadLevel("./data/levels/default.json").value();
+        auto start = std::chrono::high_resolution_clock::now();
+        const int NumSearches = 10000;
+        PathReciever pathRecievers[NumSearches];
+		std::jthread pathWorker(PathWorker, *level->tileMap);
+
+        for (int i = 0; i < NumSearches; ++i)
+        {
+            FindPath({ 140, 540 }, { 610, 19 }, &pathRecievers[i]);
+        }
+
+        DispatchTask();
+
+		// wait for all paths to be calculated
+        for (int i = 0; i < NumSearches; ++i)
+        {
+            while (!pathRecievers[i].ready)
+            {
+                CheckPaths();
+            }
+        }
+
+        auto dur = std::chrono::high_resolution_clock::now() - start;
+
+        float secs = std::chrono::duration<float>(dur).count();
+
+        std::cout << secs << " seconds per " << NumSearches << " Astar searches" << std::endl;
+
+        KillWorkers();
+
+        return 0;
+    }
+
 	std::cout << "Running at: " << std::filesystem::current_path() << std::endl;
 	sf::RenderWindow& window = GetWindow();
     window.setVerticalSyncEnabled(true);
+
+
 
     bool editorInited = EditorInit(window);
 

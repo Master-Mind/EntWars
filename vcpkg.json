@@ -10,6 +10,7 @@
     "yaml-cpp",
     "portable-file-dialogs",
     "eastl",
-    "argparse"
+    "argparse",
+    "atomic-queue"
   ]
 }
