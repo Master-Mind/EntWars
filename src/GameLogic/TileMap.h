@@ -15,6 +15,8 @@ enum TileType : char
 	empty,
 	wall,
 	error,
+	blueWorkerBarracks,
+	redWorkerBarracks,
 	count
 };
 

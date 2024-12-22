@@ -14,7 +14,7 @@ struct PathReciever
 	bool ready = false;
 };
 
-void FindPath(const sf::Vector2i& start, const sf::Vector2i& end,
+void FindPath(const sf::Vector2f& start, const sf::Vector2f& end,
 	PathReciever* pathReciever);
 void CheckPaths();
 void DispatchTask();

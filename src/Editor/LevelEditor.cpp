@@ -5,7 +5,9 @@
 #include <SFML/Graphics/Shape.hpp>
 
 #include "../Core/Input.h"
+#include "../GameLogic/EntCommon.h"
 #include "SFML/Window/Mouse.hpp"
+#include "../Core/Time.h"
 
 static void EditTileMap(std::unique_ptr<Level>& level, sf::RenderWindow& window, bool &changed)
 {
@@ -19,7 +21,7 @@ static void EditTileMap(std::unique_ptr<Level>& level, sf::RenderWindow& window,
 	ImGui::InputInt("Height", &newHeight);
 
 	static int curTile = 0;
-	ImGui::Combo("Tile", &curTile, "Empty\0Wall\0");
+	ImGui::Combo("Tile", &curTile, "Empty\0Wall\0Error\0Blue Worker Barracks\0Red Worker Barracks");
 
 	if (InputDown(Input::Num0))
 	{
@@ -146,31 +148,63 @@ void TestPathfinding(std::unique_ptr<Level>& level, sf::RenderWindow& window)
 	}
 }
 
+static bool Playmode = false;
+
 bool EditLevel(std::unique_ptr<Level>& level, sf::RenderWindow &window)
 {
 	bool changed = false;
 
-	if (ImGui::Begin("Level Editor"))
+	if (!Playmode)
 	{
-		ImGui::Text("Level Name: %s", level->name.c_str());
-		
-		static int mode = 0;
-		ImGui::Combo("Mode", &mode, "Tile Map Editor\0AStar Tester\0");
-
-		switch (mode)
+		if (ImGui::Begin("Level Editor"))
 		{
-		case 0:
-			EditTileMap(level, window, changed);
-			break;
-		case 1:
-			TestPathfinding(level, window);
-			break;
-		default:
-			break;
+			ImGui::Text("Level Name: %s", level->name.c_str());
+
+			static int mode = 0;
+			ImGui::Combo("Mode", &mode, "Tile Map Editor\0AStar Tester\0");
+
+			switch (mode)
+			{
+			case 0:
+				EditTileMap(level, window, changed);
+				break;
+			case 1:
+				TestPathfinding(level, window);
+				break;
+			default:
+				break;
+			}
+
+			ImGui::End();
 		}
 	}
 
-	ImGui::End();
+	if (Playmode)
+	{
+		LogicUpdate();
+	}
 
 	return changed;
+}
+
+void Play(const std::unique_ptr<Level>& level)
+{
+	Playmode = true;
+	SetTimeScale(1);
+	LogicInit(level);
+}
+
+void Stop()
+{
+	Playmode = false;
+	SetTimeScale(0);
+	LogicDeinit();
+}
+
+void LevelEditorDenit()
+{
+	if (Playmode)
+	{
+		LogicDeinit();
+	}
 }

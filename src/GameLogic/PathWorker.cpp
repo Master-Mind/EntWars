@@ -38,9 +38,12 @@ thread_local std::queue<PathFuture> pathFutures;
 
 void DispatchTask()
 {
-	pathFutures.push(localtask->pathPromises.get_future());
-	q.push(localtask);
-	localtask = new FindPaths();
+	if (!localtask->starts.empty())
+	{
+		pathFutures.push(localtask->pathPromises.get_future());
+		q.push(localtask);
+		localtask = new FindPaths();
+	}
 }
 
 void KillWorkers()
@@ -49,12 +52,12 @@ void KillWorkers()
 }
 
 //non path worker thread code
-void FindPath(const sf::Vector2i& start, const sf::Vector2i& end,
+void FindPath(const sf::Vector2f& start, const sf::Vector2f& end,
 	PathReciever* pathReciever)
 {
 	assert(pathReciever);
-	localtask->starts.push_back(sf::Vector2f(start));
-	localtask->ends.push_back(sf::Vector2f(end));
+	localtask->starts.push_back(start);
+	localtask->ends.push_back(end);
 	localtask->pathRecievers.emplace_back(pathReciever);
 
 	if (localtask->starts.size() == pathsPerTask)
@@ -95,7 +98,7 @@ void FindPaths::Execute()
 
 	for (int i = 0; i < starts.size(); ++i)
 	{
-		paths[i] = std::move(threadLocalMap->AStarSearch(starts[i], ends[i]));
+		paths[i] = threadLocalMap->AStarSearch(starts[i], ends[i]);
 	}
 
 	pathPromises.set_value({ std::move(paths), std::move(pathRecievers) });

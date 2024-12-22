@@ -14,6 +14,7 @@
 #include <argparse/argparse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Core/Time.h"
 #include "GameLogic/PathWorker.h"
 
 int main(int argc, char **argv)
@@ -37,6 +38,9 @@ int main(int argc, char **argv)
         std::exit(1);
     }
 
+    sf::Vector2f unreachableEnd = { 610, 19 };
+    sf::Vector2f reachableEnd = { 610, 40 };
+
     if (program.get<bool>("--testastar"))
     {
         auto level = LoadLevel("./data/levels/default.json").value();
@@ -47,7 +51,7 @@ int main(int argc, char **argv)
 
         for (int i = 0; i < NumSearches; ++i)
         {
-            level->tileMap->AStarSearch({ 140, 540 }, { 610, 19 });
+            level->tileMap->AStarSearch({ 140, 540 }, unreachableEnd);
         }
 
         auto dur = std::chrono::high_resolution_clock::now() - start;
@@ -69,7 +73,7 @@ int main(int argc, char **argv)
 
         for (int i = 0; i < NumSearches; ++i)
         {
-            FindPath({ 140, 540 }, { 610, 19 }, &pathRecievers[i]);
+            FindPath({ 140, 540 }, unreachableEnd, &pathRecievers[i]);
         }
 
         DispatchTask();
@@ -155,9 +159,12 @@ int main(int argc, char **argv)
         EditorRender(window);
         window.display();
 		InputEndFrame();
+		TimeUpdate();
     }
 
     EditorDeinit();
+
+    KillWorkers();
 
     return 0;
 }

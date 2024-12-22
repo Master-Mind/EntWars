@@ -103,6 +103,16 @@ void EditorUpdate(sf::RenderWindow& _mainwindow)
 		saveLevel();
 	}
 
+	ImGui::Separator();
+	if (ImGui::Button("Stop"))
+	{
+		Stop();
+	}
+	if (ImGui::Button("Play"))
+	{
+		Play(editedLevel);
+	}
+
     ImGui::EndMainMenuBar();
 
 	if (editedLevel)
@@ -118,5 +128,6 @@ void EditorRender(sf::RenderWindow& _mainwindow)
 
 void EditorDeinit()
 {
+	LevelEditorDenit();
     ImGui::SFML::Shutdown();
 }

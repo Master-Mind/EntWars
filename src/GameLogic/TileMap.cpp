@@ -6,10 +6,17 @@
 
 #include "../Core/fileutils.hpp"
 
-const float tileCosts[TileType::count] = { 0.0f, 1.1f };
+const float tileCosts[TileType::count] = { 0.0f, 1.1f, 0.0f, 1.1f, 1.1f };
 const float TileMap::tileSize = 10;
-const std::array<sf::Color, TileType::count> tileColors = { sf::Color::Magenta, sf::Color(135,62,35), sf::Color::Magenta};
-const std::array<const char, TileType::count> tileChars = { '_', '#' };
+const std::array<sf::Color, TileType::count> tileColors =
+{
+	sf::Color::Magenta,
+	sf::Color(135,62,35),
+	sf::Color::Magenta,
+	sf::Color::Blue, 
+	sf::Color::Red
+};
+const std::array<const char, TileType::count> tileChars = { '_', '#', '!', 'B', 'R' };
 const float hweight = 1.5f;
 
 void TileMap::Resize(int newWidth, int newHeight)
@@ -253,6 +260,8 @@ std::expected<std::unique_ptr<TileMap>, std::string> LoadTileMap(const std::file
 	TileType asciiToTileType[128] = {TileType::error};
 	asciiToTileType['_'] = TileType::empty;
 	asciiToTileType['#'] = TileType::wall;
+	asciiToTileType['R'] = TileType::redWorkerBarracks;
+	asciiToTileType['B'] = TileType::blueWorkerBarracks;
 
 	if (fileContents.size() < 2)
 	{
