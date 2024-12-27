@@ -55,14 +55,14 @@ static void EditTileMap(std::unique_ptr<Level>& level, sf::RenderWindow& window,
 
 		for (int x = 0; x <= level->tileMap->width; x++)
 		{
-			verts[x * 2] = sf::Vertex(sf::Vector2f(x * level->tileMap->tileSize, 0), sf::Color::White);
-			verts[x * 2 + 1] = sf::Vertex(sf::Vector2f(x * level->tileMap->tileSize, level->tileMap->height * level->tileMap->tileSize), sf::Color::White);
+			verts[x * 2] = sf::Vertex(sf::Vector2f(x * TileMap::tileSize, 0), sf::Color::White);
+			verts[x * 2 + 1] = sf::Vertex(sf::Vector2f(x * TileMap::tileSize, level->tileMap->height * TileMap::tileSize), sf::Color::White);
 		}
 
 		for (int y = 0; y <= level->tileMap->height; y++)
 		{
-			verts[(level->tileMap->width + y + 1) * 2] = sf::Vertex(sf::Vector2f(0, y * level->tileMap->tileSize), sf::Color::White);
-			verts[(level->tileMap->width + y + 1) * 2 + 1] = sf::Vertex(sf::Vector2f(level->tileMap->width * level->tileMap->tileSize, y * level->tileMap->tileSize), sf::Color::White);
+			verts[(level->tileMap->width + y + 1) * 2] = sf::Vertex(sf::Vector2f(0, y * TileMap::tileSize), sf::Color::White);
+			verts[(level->tileMap->width + y + 1) * 2 + 1] = sf::Vertex(sf::Vector2f(level->tileMap->width * TileMap::tileSize, y * TileMap::tileSize), sf::Color::White);
 		}
 
 		window.draw(verts.data(), verts.size(), sf::Lines);
@@ -71,15 +71,15 @@ static void EditTileMap(std::unique_ptr<Level>& level, sf::RenderWindow& window,
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
-		int gridx = static_cast<int>(std::floor(worldPos.x / level->tileMap->tileSize));
-		int gridy = static_cast<int>(std::floor(worldPos.y / level->tileMap->tileSize)); //hittin the gridy for ukraine
+		int gridx = static_cast<int>(std::floor(worldPos.x / TileMap::tileSize));
+		int gridy = static_cast<int>(std::floor(worldPos.y / TileMap::tileSize)); //hittin the gridy for ukraine
 
 		sf::Vertex square[5] = {
-			sf::Vertex(sf::Vector2f(gridx * level->tileMap->tileSize, gridy * level->tileMap->tileSize), sf::Color::Red),
-			sf::Vertex(sf::Vector2f((gridx + 1) * level->tileMap->tileSize, gridy * level->tileMap->tileSize), sf::Color::Red),
-			sf::Vertex(sf::Vector2f((gridx + 1) * level->tileMap->tileSize, (gridy + 1) * level->tileMap->tileSize), sf::Color::Red),
-			sf::Vertex(sf::Vector2f(gridx * level->tileMap->tileSize, (gridy + 1) * level->tileMap->tileSize), sf::Color::Red),
-			sf::Vertex(sf::Vector2f(gridx * level->tileMap->tileSize, gridy * level->tileMap->tileSize), sf::Color::Red)
+			sf::Vertex(sf::Vector2f(gridx * TileMap::tileSize, gridy * TileMap::tileSize), sf::Color::Red),
+			sf::Vertex(sf::Vector2f((gridx + 1) * TileMap::tileSize, gridy * TileMap::tileSize), sf::Color::Red),
+			sf::Vertex(sf::Vector2f((gridx + 1) * TileMap::tileSize, (gridy + 1) * TileMap::tileSize), sf::Color::Red),
+			sf::Vertex(sf::Vector2f(gridx * TileMap::tileSize, (gridy + 1) * TileMap::tileSize), sf::Color::Red),
+			sf::Vertex(sf::Vector2f(gridx * TileMap::tileSize, gridy * TileMap::tileSize), sf::Color::Red)
 		};
 
 		window.draw(square, 5, sf::LineStrip);

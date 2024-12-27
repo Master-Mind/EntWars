@@ -2,14 +2,14 @@
 //adding this lib because sfml doesn't have any math functions ._.
 #include <SFML/System/Vector2.hpp>
 
-inline float VecLen(const sf::Vector2f& vec)
-{
-	return std::sqrt(vec.x * vec.x + vec.y * vec.y);
-}
-
 inline float VecLenSquared(const sf::Vector2f& vec)
 {
 	return vec.x * vec.x + vec.y * vec.y;
+}
+
+inline float VecLen(const sf::Vector2f& vec)
+{
+	return std::sqrt(VecLenSquared(vec));
 }
 
 inline sf::Vector2f VecNorm(const sf::Vector2f& vec)

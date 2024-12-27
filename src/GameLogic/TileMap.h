@@ -10,13 +10,17 @@
 
 struct PathNode;
 
+// NOTE: when adding a type here, also add to:
+// 1. tileCosts
+// 2. tileColors
+// 3. tileChars
+// 4. asciiToTileType
 enum TileType : char
 {
 	empty,
 	wall,
 	error,
-	blueWorkerBarracks,
-	redWorkerBarracks,
+	headquarters,
 	count
 };
 

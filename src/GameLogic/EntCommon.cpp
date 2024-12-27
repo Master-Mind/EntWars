@@ -5,6 +5,7 @@
 #include "../Core/TheWindow.h"
 #include "../Core/VectorMath.hpp"
 #include <EASTL/fixed_vector.h>
+#include "Systems/Units.h"
 
 entt::registry registry;
 
@@ -16,21 +17,13 @@ void LogicInit(const std::unique_ptr<Level>& level)
 	{
 		for (int y = 0; y < level->tileMap->height; ++y)
 		{
-			if (level->tileMap->GetTile(x, y) == TileType::blueWorkerBarracks)
+			if (level->tileMap->GetTile(x, y) == TileType::headquarters)
 			{
 				auto entity = registry.create();
-				registry.emplace<Position>(entity, sf::Vector2f(x * level->tileMap->tileSize, y * level->tileMap->tileSize));
+				registry.emplace<Position>(entity, sf::Vector2f(x * TileMap::tileSize, y * TileMap::tileSize));
 				registry.emplace<Velocity>(entity, sf::Vector2f(0, 0));
 				registry.emplace<PathFollower>(entity, PathReciever{}, sf::Vector2f{ 574, 64 });
-				registry.emplace<CircleRenderer>(entity, level->tileMap->tileSize / 2, sf::Color::Blue);
-			}
-			else if (level->tileMap->GetTile(x, y) == TileType::redWorkerBarracks)
-			{
-				auto entity = registry.create();
-				registry.emplace<Position>(entity, sf::Vector2f(x * level->tileMap->tileSize, y * level->tileMap->tileSize));
-				registry.emplace<Velocity>(entity, sf::Vector2f(0, 0));
-				registry.emplace<PathFollower>(entity, PathReciever{}, sf::Vector2f{ 140, 540 });
-				registry.emplace<CircleRenderer>(entity, level->tileMap->tileSize / 2, sf::Color::Red);
+				registry.emplace<CircleRenderer>(entity, TileMap::tileSize / 2, sf::Color::Blue);
 			}
 		}
 	}

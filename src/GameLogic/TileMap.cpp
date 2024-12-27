@@ -6,17 +6,24 @@
 
 #include "../Core/fileutils.hpp"
 
-const float tileCosts[TileType::count] = { 0.0f, 1.1f, 0.0f, 1.1f, 1.1f };
+//tilemap memory footprint calculation
+// n = number of tiles
+// 1 byte for each tile
+// 2 bits per tile for open and closed
+// 4 bytes per tile for cost so far
+// 8 bytes per tile for came from
+// total = n + n/4 + 4n + 8n = 13n + n/4
+
+const float tileCosts[TileType::count] = { 0.0f, 1.1f, 0.0f, 1.1f };
 const float TileMap::tileSize = 10;
 const std::array<sf::Color, TileType::count> tileColors =
 {
 	sf::Color::Magenta,
 	sf::Color(135,62,35),
 	sf::Color::Magenta,
-	sf::Color::Blue, 
-	sf::Color::Red
+	sf::Color::Magenta
 };
-const std::array<const char, TileType::count> tileChars = { '_', '#', '!', 'B', 'R' };
+const std::array<const char, TileType::count> tileChars = { '_', '#', '!', 'H' };
 const float hweight = 1.5f;
 
 void TileMap::Resize(int newWidth, int newHeight)
@@ -260,8 +267,7 @@ std::expected<std::unique_ptr<TileMap>, std::string> LoadTileMap(const std::file
 	TileType asciiToTileType[128] = {TileType::error};
 	asciiToTileType['_'] = TileType::empty;
 	asciiToTileType['#'] = TileType::wall;
-	asciiToTileType['R'] = TileType::redWorkerBarracks;
-	asciiToTileType['B'] = TileType::blueWorkerBarracks;
+	asciiToTileType['H'] = TileType::headquarters;
 
 	if (fileContents.size() < 2)
 	{
